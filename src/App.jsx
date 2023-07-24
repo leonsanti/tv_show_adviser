@@ -42,7 +42,7 @@ export function App() {
         </div>
       </div>
       <div className={style.tv_show_detail}>Details
-       { <TVShowDetail tvShow={currentTVShow} /> }
+       { currentTVShow && <TVShowDetail tvShow={currentTVShow} /> }
       </div>
       <div className={style.recommended_tv_shows}>Recommended to you</div>
     </div>

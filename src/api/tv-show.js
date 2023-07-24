@@ -8,6 +8,6 @@ export class TVShowAPI {
     // const url = `${BASE_URL}tv/popular${API_KEY_PARAM}`;
     // const response = await axios.get(url);
     // return response.data.results;
-    return FAKE_POPULARS
-  }
+    return FAKE_POPULARS;
+;  }
 }

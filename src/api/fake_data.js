@@ -11,7 +11,7 @@ export const FAKE_POPULARS = [
     overview: "",
     popularity: 3306.351,
     poster_path: "/voaKRrYExZNkf1E4FZExU7fTd8w.jpg",
-    vote_average: 5.5,
+    vote_average: 7.77,
     vote_count: 46,
   },
 ];
