@@ -7,25 +7,45 @@ import { Logo } from "./components/Logo/Logo";
 import { TVShowDetail } from "./components/TVShowDetail/TVShowDetail";
 import { TVShowListItem } from "./components/TVShowListItem/TVShowListItem";
 import { TVShowList } from "./components/TVShowList/TVShowList";
+import { SearchBar } from "./components/SearchBar/SearchBar";
 
 export function App() {
   const [currentTVShow, setCurrentTVShow] = useState();
   const [recommendationList, setRecommendationList] = useState([]);
 
   async function fetchPopulars() {
-    const popularTVShowList = await TVShowAPI.fetchPopulars();
-    console.log(popularTVShowList);
-    if (popularTVShowList.length > 0) {
-      setCurrentTVShow(popularTVShowList[0]);
+    try {
+      const popularTVShowList = await TVShowAPI.fetchPopulars();
+      console.log(popularTVShowList);
+      if (popularTVShowList.length > 0) {
+        setCurrentTVShow(popularTVShowList[0]);
+      }
+    } catch (error) {
+      alert("Something went wrong when fetching populars TV Shows");
     }
   }
 
   async function fetchRecommendations(tvShowId) {
-    const recommendationListResp = await TVShowAPI.fetchRecommendations(
-      tvShowId
-    );
-    if (recommendationListResp.length > 0) {
-      setRecommendationList(recommendationListResp.slice(0, 10));
+    try {
+      const recommendationListResp = await TVShowAPI.fetchRecommendations(
+        tvShowId
+      );
+      if (recommendationListResp.length > 0) {
+        setRecommendationList(recommendationListResp.slice(0, 10));
+      }
+    } catch (error) {
+      alert("Something went wrong when fetching the recommended TV shows");
+    }
+  }
+
+  async function fetchByTitle(title) {
+    try {
+      const searchResponse = await TVShowAPI.fetchByTitle(title);
+      if (searchResponse.length > 0) {
+        setCurrentTVShow(searchResponse[0]);
+      }
+    } catch (error) {
+      alert("Something went wrong when trying to find the TV Show");
     }
   }
 
@@ -39,9 +59,10 @@ export function App() {
     }
   }, [currentTVShow]);
 
-  console.log(recommendationList);
+  function updateCurrentTVShow(tvShow) {
+    setCurrentTVShow(tvShow);
+  }
 
-  console.log(currentTVShow);
   return (
     <div
       className={style.main_container}
@@ -62,7 +83,7 @@ export function App() {
             />
           </div>
           <div className="col-md-12 col-lg-4">
-            <input style={{ width: "100%" }} type="text" />
+            <SearchBar onSubmit={fetchByTitle} />
           </div>
         </div>
       </div>
@@ -70,7 +91,12 @@ export function App() {
         {currentTVShow && <TVShowDetail tvShow={currentTVShow} />}
       </div>
       <div className={style.recommended_tv_shows}>
-        {currentTVShow && <TVShowList tvShowList={recommendationList} />}
+        {currentTVShow && (
+          <TVShowList
+            onClickItem={updateCurrentTVShow}
+            tvShowList={recommendationList}
+          />
+        )}
       </div>
     </div>
   );
